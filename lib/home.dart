@@ -41,6 +41,7 @@ class _HomeState extends State<Home> {
         phone: "09673338880",
         dob: DateTime(1990, 02, 10)),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +57,10 @@ class _HomeState extends State<Home> {
           ));
         },
         label: Row(
-          children: <Widget>[Icon(Icons.add), Text("Add New")],
+          children: <Widget>[
+            Icon(Icons.add),
+            Text("Add New"),
+          ],
         ),
       ),
     );

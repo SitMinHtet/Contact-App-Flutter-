@@ -5,5 +5,11 @@ class Contact {
   String phone;
   DateTime dob;
 
-  Contact({this.id, this.name, this.email, this.phone, this.dob});
+  Contact({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.dob,
+  });
 }

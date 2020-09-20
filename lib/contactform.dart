@@ -6,6 +6,12 @@ class ContactForm extends StatefulWidget {
 }
 
 class _ContactFormState extends State<ContactForm> {
+  DateTime selectedDate;
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  final formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,15 +22,16 @@ class _ContactFormState extends State<ContactForm> {
       body: Container(
         margin: EdgeInsets.all(20),
         child: Form(
+            key: formkey,
             child: ListView(
-          children: <Widget>[
-            namefield(),
-            emailfield(),
-            phonefield(),
-            dobfield(),
-            savebutton()
-          ],
-        )),
+              children: <Widget>[
+                namefield(),
+                emailfield(),
+                phonefield(),
+                dobfield(),
+                savebutton()
+              ],
+            )),
       ),
     );
   }
@@ -33,6 +40,13 @@ class _ContactFormState extends State<ContactForm> {
     return Container(
       margin: EdgeInsets.only(top: 16),
       child: TextFormField(
+        controller: nameController,
+        validator: (value) {
+          if (value.length < 5) {
+            return "Name must be more than 5";
+          }
+          return null;
+        },
         decoration: InputDecoration(
           labelText: "Enter Name",
           prefixIcon: Icon(Icons.people),
@@ -46,6 +60,13 @@ class _ContactFormState extends State<ContactForm> {
     return Container(
       margin: EdgeInsets.only(top: 16),
       child: TextFormField(
+        controller: emailController,
+        validator: (value) {
+          if (!value.contains("@")) {
+            return "Invalid Email";
+          }
+          return null;
+        },
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           labelText: "Enter Email",
@@ -60,9 +81,16 @@ class _ContactFormState extends State<ContactForm> {
     return Container(
       margin: EdgeInsets.only(top: 16),
       child: TextFormField(
+        controller: phoneController,
+        validator: (value) {
+          if (value.length < 10) {
+            return "Phone must be more than 10";
+          }
+          return null;
+        },
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
-          labelText: "Enter Name",
+          labelText: "Enter Phone Number",
           prefixIcon: Icon(Icons.phone),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
         ),
@@ -101,12 +129,23 @@ class _ContactFormState extends State<ContactForm> {
     );
   }
 
+  void submitData(context) {
+    final enterName = nameController.text;
+    final enterEmail = emailController.text;
+    final enterPhone = phoneController.text;
+    print(enterName + enterEmail + enterPhone);
+  }
+
   Widget savebutton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+            if (formkey.currentState.validate()) {
+              submitData(context);
+            }
+          },
           child: Text("Save"),
         ),
       ],
