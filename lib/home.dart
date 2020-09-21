@@ -48,12 +48,12 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Contacts"),
       ),
-      body: ContactList(_contact),
+      body: ContactList(_contact, deleteContact),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ContactForm(),
+            builder: (context) => ContactForm(addContact),
           ));
         },
         label: Row(
@@ -64,5 +64,23 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void addContact(String name, String email, String phone, DateTime dob) {
+    final newContact = Contact(
+        id: DateTime.now().toIso8601String(),
+        name: name,
+        email: email,
+        phone: phone,
+        dob: dob);
+    _contact.add(newContact);
+  }
+
+  String deleteContact(String id) {
+    setState(() {
+      _contact.removeWhere((contact) => contact.id == id);
+    });
+
+    return "Deleted";
   }
 }

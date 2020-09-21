@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ContactForm extends StatefulWidget {
+  final Function addConatct;
+  ContactForm(this.addConatct);
+
   @override
   _ContactFormState createState() => _ContactFormState();
 }
@@ -104,7 +108,11 @@ class _ContactFormState extends State<ContactForm> {
             initialDate: DateTime(1990),
             firstDate: DateTime(1990),
             lastDate: DateTime.now())
-        .then((value) => print(value));
+        .then((value) {
+      setState(() {
+        selectedDate = value;
+      });
+    });
   }
 
   Widget dobfield() {
@@ -123,7 +131,9 @@ class _ContactFormState extends State<ContactForm> {
             },
             icon: Icon(Icons.calendar_today),
           ),
-          Text("DOB")
+          Text(selectedDate == null
+              ? "DOB"
+              : "${DateFormat.yMMMMd().format(selectedDate)}")
         ],
       ),
     );
@@ -133,7 +143,8 @@ class _ContactFormState extends State<ContactForm> {
     final enterName = nameController.text;
     final enterEmail = emailController.text;
     final enterPhone = phoneController.text;
-    print(enterName + enterEmail + enterPhone);
+
+    widget.addConatct(enterName, enterEmail, enterPhone, selectedDate);
   }
 
   Widget savebutton() {
@@ -144,6 +155,7 @@ class _ContactFormState extends State<ContactForm> {
           onPressed: () {
             if (formkey.currentState.validate()) {
               submitData(context);
+              Navigator.of(context).pop();
             }
           },
           child: Text("Save"),
